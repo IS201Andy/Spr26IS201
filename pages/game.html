@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Snake: Fruit & Birds</title>
+
+<style>
+body{
+    margin:0;
+    background:#222;
+    color:white;
+    font-family:Arial,sans-serif;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding-top:20px;
+}
+
+h1{
+    margin-bottom:5px;
+}
+
+#score{
+    font-size:1.2rem;
+    margin-bottom:10px;
+}
+
+canvas{
+    background:black;
+    border:3px solid white;
+}
+
+#restartBtn{
+    margin-top:10px;
+    padding:10px 20px;
+    font-size:18px;
+    cursor:pointer;
+    display:none;
+}
+
+#instructions{
+    margin-top:10px;
+    text-align:center;
+    color:#ccc;
+    max-width:700px;
+}
+</style>
+</head>
+<body>
+
+<h1>Snake: Fruit & Birds</h1>
+<a href="scratch.html">Help! I want to go back to the scratch page!</a>
+
+<div id="score">Score: 0</div>
+
+<canvas id="game" width="600" height="600"></canvas>
+
+<button id="restartBtn" onclick="restart()">
+    Restart Game
+</button>
+
+<div id="instructions">
+    Arrow Keys = Move<br>
+    Fruit ages and becomes less valuable over time.<br>
+    Large fruit requires multiple bites.<br>
+    Birds are deadly. Touch one and it's game over.<br>
+    Birds periodically relocate around the map.
+</div>
+
+<script>
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const GRID = 20;
+const TILES = canvas.width / GRID;
+
+const MAX_FRUITS = 4;
+const MAX_BIRDS = 5;
+
+const FRUIT_LIFE = 175;
+const BIRD_LIFE = 800;
+
+let snake;
+let dx;
+let dy;
+let score;
+let growth;
+let gameOver;
+let gameStarted;
+
+let fruits = [];
+let birds = [];
+
+function randomSize(){
+    return [1,2,3][Math.floor(Math.random()*3)];
+}
+
+function createFruit(){
+
+    const size = randomSize();
+
+    return {
+        x: Math.floor(Math.random()*(TILES-size)),
+        y: Math.floor(Math.random()*(TILES-size)),
+        size: size,
+
+        bitesRemaining: size*size,
+
+        age: 0,
+        maxAge: FRUIT_LIFE,
+
+        baseValue: size*25
+    };
+}
+
+function createBird(){
+
+    const size = randomSize();
+
+    return {
+        x: Math.floor(Math.random()*(TILES-size)),
+        y: Math.floor(Math.random()*(TILES-size)),
+        size: size,
+
+        age: 0,
+        maxAge: BIRD_LIFE
+    };
+}
+
+function restart(){
+
+    snake = [{x:15,y:15}];
+
+    dx = 0;
+    dy = 0;
+
+    score = 0;
+    growth = 0;
+
+    gameOver = false;
+    gameStarted = false;
+
+    fruits = [];
+    birds = [];
+
+    for(let i=0;i<3;i++){
+        fruits.push(createFruit());
+    }
+
+    for(let i=0;i<2;i++){
+        birds.push(createBird());
+    }
+
+    document.getElementById("score").textContent =
+        "Score: 0";
+
+    document.getElementById("restartBtn").style.display =
+        "none";
+}
+
+document.addEventListener("keydown", e => {
+
+    if(gameOver) return;
+
+    if(e.key==="ArrowLeft" && dx===0){
+        dx=-1;
+        dy=0;
+        gameStarted=true;
+    }
+    else if(e.key==="ArrowRight" && dx===0){
+        dx=1;
+        dy=0;
+        gameStarted=true;
+    }
+    else if(e.key==="ArrowUp" && dy===0){
+        dx=0;
+        dy=-1;
+        gameStarted=true;
+    }
+    else if(e.key==="ArrowDown" && dy===0){
+        dx=0;
+        dy=1;
+        gameStarted=true;
+    }
+
+});
+
+function update(){
+
+    if(gameOver) return;
+
+    if(!gameStarted) return;
+
+    // Age fruit
+
+    for(let i=fruits.length-1;i>=0;i--){
+
+        fruits[i].age++;
+
+        if(fruits[i].age >= fruits[i].maxAge){
+            fruits.splice(i,1);
+        }
+    }
+
+    // Age birds
+
+    for(let i=birds.length-1;i>=0;i--){
+
+        birds[i].age++;
+
+        if(birds[i].age >= birds[i].maxAge){
+
+            birds.splice(i,1);
+
+            if(birds.length < MAX_BIRDS){
+                birds.push(createBird());
+            }
+        }
+    }
+
+    while(fruits.length < MAX_FRUITS){
+        fruits.push(createFruit());
+    }
+
+    while(birds.length < MAX_BIRDS){
+        birds.push(createBird());
+    }
+
+    const head = {
+        x: snake[0].x + dx,
+        y: snake[0].y + dy
+    };
+
+    if(
+        head.x < 0 ||
+        head.y < 0 ||
+        head.x >= TILES ||
+        head.y >= TILES
+    ){
+        gameOver = true;
+        return;
+    }
+
+    for(const segment of snake){
+
+        if(
+            head.x === segment.x &&
+            head.y === segment.y
+        ){
+            gameOver = true;
+            return;
+        }
+    }
+
+    for(const bird of birds){
+
+        if(
+            head.x >= bird.x &&
+            head.x < bird.x + bird.size &&
+            head.y >= bird.y &&
+            head.y < bird.y + bird.size
+        ){
+            gameOver = true;
+            return;
+        }
+    }
+
+    snake.unshift(head);
+
+    let ateSomething = false;
+
+    for(let i=fruits.length-1;i>=0;i--){
+
+        const fruit = fruits[i];
+
+        if(
+            head.x >= fruit.x &&
+            head.x < fruit.x + fruit.size &&
+            head.y >= fruit.y &&
+            head.y < fruit.y + fruit.size
+        ){
+
+            fruit.bitesRemaining--;
+
+            growth++;
+            ateSomething = true;
+
+            const freshness =
+                1 - (fruit.age / fruit.maxAge);
+
+            const points =
+                Math.max(
+                    1,
+                    Math.floor(
+                        fruit.baseValue * freshness
+                    )
+                );
+
+            score += points;
+
+            document.getElementById("score").textContent =
+                "Score: " + score;
+
+            if(fruit.bitesRemaining <= 0){
+                fruits.splice(i,1);
+            }
+
+            break;
+        }
+    }
+
+    if(!ateSomething && growth > 0){
+        growth--;
+    }
+
+    if(growth <= 0){
+        snake.pop();
+    }
+
+}
+
+function drawGrid(){
+
+    ctx.strokeStyle="#111";
+
+    for(let i=0;i<=TILES;i++){
+
+        ctx.beginPath();
+        ctx.moveTo(i*GRID,0);
+        ctx.lineTo(i*GRID,canvas.height);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(0,i*GRID);
+        ctx.lineTo(canvas.width,i*GRID);
+        ctx.stroke();
+    }
+}
+
+function drawFruits(){
+
+    ctx.font="bold 14px Arial";
+    ctx.textAlign="center";
+
+    for(const fruit of fruits){
+
+        const freshness =
+            1 - (fruit.age / fruit.maxAge);
+
+        let color;
+
+        if(freshness > .66){
+            color="#00ff00";
+        }
+        else if(freshness > .33){
+            color="#ffff00";
+        }
+        else{
+            color="#ff3333";
+        }
+
+        ctx.fillStyle=color;
+
+        ctx.fillRect(
+            fruit.x*GRID,
+            fruit.y*GRID,
+            fruit.size*GRID,
+            fruit.size*GRID
+        );
+
+        ctx.fillStyle="black";
+
+        ctx.fillText(
+            fruit.bitesRemaining,
+            fruit.x*GRID + (fruit.size*GRID/2),
+            fruit.y*GRID + (fruit.size*GRID/2)+5
+        );
+    }
+}
+
+function drawBirds(){
+
+    ctx.font="bold 18px Arial";
+    ctx.textAlign="center";
+
+    for(const bird of birds){
+
+        const lifePercent =
+            1 - (bird.age / bird.maxAge);
+
+        if(lifePercent > .66){
+            ctx.fillStyle="#5555ff";
+        }
+        else if(lifePercent > .33){
+            ctx.fillStyle="#8844ff";
+        }
+        else{
+            ctx.fillStyle="#ff44ff";
+        }
+
+        ctx.fillRect(
+            bird.x*GRID,
+            bird.y*GRID,
+            bird.size*GRID,
+            bird.size*GRID
+        );
+
+        ctx.fillStyle="white";
+
+        ctx.fillText(
+            "☠",
+            bird.x*GRID + (bird.size*GRID/2),
+            bird.y*GRID + (bird.size*GRID/2)+6
+        );
+    }
+}
+
+function drawSnake(){
+
+    snake.forEach((segment,index)=>{
+
+        ctx.fillStyle =
+            index===0
+            ? "#00ff88"
+            : "#00aa55";
+
+        ctx.fillRect(
+            segment.x*GRID,
+            segment.y*GRID,
+            GRID,
+            GRID
+        );
+    });
+}
+
+function drawGameOver(){
+
+    ctx.fillStyle="rgba(0,0,0,.75)";
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle="white";
+    ctx.textAlign="center";
+
+    ctx.font="42px Arial";
+    ctx.fillText(
+        "GAME OVER",
+        canvas.width/2,
+        250
+    );
+
+    ctx.font="24px Arial";
+    ctx.fillText(
+        "Final Score: " + score,
+        canvas.width/2,
+        300
+    );
+
+    document.getElementById("restartBtn").style.display =
+        "block";
+}
+
+function drawStartScreen(){
+
+    ctx.fillStyle="rgba(0,0,0,.65)";
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    ctx.fillStyle="white";
+    ctx.textAlign="center";
+
+    ctx.font="34px Arial";
+    ctx.fillText(
+        "Press Any Arrow Key",
+        canvas.width/2,
+        canvas.height/2 - 20
+    );
+
+    ctx.font="20px Arial";
+    ctx.fillText(
+        "to Begin",
+        canvas.width/2,
+        canvas.height/2 + 20
+    );
+}
+
+function draw(){
+
+    if(!gameOver){
+        document.getElementById("restartBtn").style.display =
+            "none";
+    }
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    drawGrid();
+    drawFruits();
+    drawBirds();
+    drawSnake();
+
+    if(!gameStarted){
+        drawStartScreen();
+    }
+
+    if(gameOver){
+        drawGameOver();
+    }
+}
+
+function gameLoop(){
+    update();
+    draw();
+}
+
+restart();
+setInterval(gameLoop,100);
+
+</script>
+</body>
+</html>
