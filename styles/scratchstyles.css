@@ -1,0 +1,79 @@
+
+
+body{
+    background-color:aliceblue;
+}
+
+.descrip{
+    font-size: larger;
+}
+
+h2{
+    text-align: center;background-color: white;border: 2px solid black;
+}
+
+.snake{
+    font-family: cursive;
+}
+.ss{
+    font-family:monospace;
+}
+
+/*Picture formatting*/
+.float-right {
+  float: right;
+  margin-left: 10px; /* space between image and text */
+  margin-top: 5px;
+  margin-right: 25px;
+}
+
+/*Div formatting*/
+.common {
+  border: 2px solid white;
+  position: static;
+}
+
+.header {
+  top: 5px;
+  left: 15px;
+  height: 400px;
+    background-color: white;
+}
+
+.hobby {
+  top: 25px;
+  left: 15px;
+  right: 140px;
+  bottom: 40px;
+  position: relative;
+}
+
+
+.embed {
+  top: 25px;
+  left: 15px;
+  right: 140px;
+  bottom: 40px;
+  position: relative;
+}
+
+.links {
+  top: 25px;
+  left: 15px;
+  right: 140px;
+  bottom: 40px;
+  position: relative;
+}
+
+.footer {
+  bottom: 5px;
+  left: 40%;
+  right: 40%;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  padding-left: 7px;
+  padding-right: 7px;
+  text-align:center;
+  background-color: whitesmoke;
+  border-color: black;
+  position: fixed;}
