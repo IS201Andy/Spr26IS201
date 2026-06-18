@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Andrew Ogden | Student at Brigham Young University</title>
+<style>
+:root{
+    --mountain-blue:#1f4e79;
+    --forest-green:#355e3b;
+    --warm-white:#f8f7f4;
+    --card:#eef1f3;
+    --text:#222;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+    margin:0;
+    font-family:Segoe UI,Arial,sans-serif;
+    background:var(--warm-white);
+    color:var(--text);
+    line-height:1.6;
+}
+nav{
+    position:sticky;
+    top:0;
+    background:white;
+    padding:1rem 2rem;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+    z-index:100;
+}
+nav ul{
+    display:flex;
+    justify-content:center;
+    gap:2rem;
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+nav a{
+    text-decoration:none;
+    color:var(--mountain-blue);
+    font-weight:600;
+}
+.hero{
+    background:var(--mountain-blue);
+    color:white;
+    position:relative;
+    overflow:hidden;
+}
+.hero-content{
+    max-width:1200px;
+    margin:auto;
+    padding:5rem 2rem;
+    display:flex;
+    gap:3rem;
+    align-items:center;
+    justify-content:space-between;
+}
+.hero-text{flex:2}
+.hero-text h1{
+    margin:0;
+    font-size:3.2rem;
+}
+.hero-text h2{
+    font-weight:400;
+    margin:.5rem 0;
+}
+.tagline{
+    color:#d8e7f2;
+    font-size:1.1rem;
+    margin-bottom:1.5rem;
+}
+.hero img{
+    width:260px;
+    height:260px;
+    object-fit:cover;
+    border-radius:18px;
+    border:4px solid rgba(255,255,255,.3);
+}
+.mountain{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    opacity:.12;
+}
+.btn{
+    display:inline-block;
+    background:var(--forest-green);
+    color:white;
+    text-decoration:none;
+    padding:.9rem 1.4rem;
+    border-radius:8px;
+    font-weight:600;
+}
+section{
+    max-width:1100px;
+    margin:auto;
+    padding:4rem 2rem;
+}
+h3{
+    color:var(--mountain-blue);
+    font-size:2rem;
+}
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:1.5rem;
+}
+.card{
+    background:var(--card);
+    padding:1.5rem;
+    border-radius:12px;
+}
+.card h4{
+    color:var(--forest-green);
+    margin-top:0;
+}
+footer{
+    background:var(--mountain-blue);
+    color:white;
+    text-align:center;
+    padding:2rem;
+}
+@media(max-width:800px){
+    .hero-content{
+        flex-direction:column-reverse;
+        text-align:center;
+    }
+    .hero-text h1{
+        font-size:2.3rem;
+    }
+    nav ul{
+        gap:1rem;
+        flex-wrap:wrap;
+    }
+}
+</style>
+</head>
+<body>
+
+<nav>
+<ul>
+<li><a href="#about">About</a></li>
+<li><a href="#highlights">Highlights</a></li>
+<li><a href="#interests">Interests</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="resume.html">Resume</a></li>
+</ul>
+</nav>
+
+<header class="hero">
+<div class="hero-content">
+<div class="hero-text">
+<h1>Andrew Ogden</h1>
+<h2>Student at Brigham Young University</h2>
+<p class="tagline">Leadership • Operations • Service</p>
+<p>Provo, Utah<br>(425) 218-6851<br>ogden01@byu.edu</p>
+<p><a class="btn" href="resume.html">View Resume</a></p>
+</div>
+<div>
+<img src="images/headshot.jpg" alt="Andrew Ogden Headshot">
+</div>
+</div>
+
+<svg class="mountain" viewBox="0 0 1200 250" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 220 L250 220 L420 70 L520 160 L650 30 L760 180 L900 90 L1050 170 L1200 140"
+fill="none" stroke="white" stroke-width="4"/>
+</svg>
+</header>
+
+<section id="about">
+<h3>About Me</h3>
+<p>
+Originally from the greater Seattle area and currently studying at Brigham Young University, I am interested in the intersection of leadership, business, and community. My background includes operations management, logistics, teaching, construction, landscaping, and community service. These experiences have strengthened my ability to lead teams, solve problems, and adapt to new challenges. I value integrity, continuous improvement, and thoughtful decision-making, and I enjoy finding practical ways to help organizations and individuals succeed. As I continue my education, I hope to build a career that combines analytical thinking, service, and leadership to create meaningful and lasting impact.
+</p>
+</section>
+
+<section id="highlights">
+<h3>Professional Highlights</h3>
+<div class="cards">
+<div class="card">
+<h4>Leadership</h4>
+<p>Team supervision, training, mentoring, and organizational responsibility across education, food service, and volunteer settings.</p>
+</div>
+<div class="card">
+<h4>Operations</h4>
+<p>Experience managing logistics, inventory, scheduling, procurement, and high-volume service environments.</p>
+</div>
+<div class="card">
+<h4>Teaching & Mentorship</h4>
+<p>Dance instruction, youth development, curriculum support, and leadership training.</p>
+</div>
+<div class="card">
+<h4>Service</h4>
+<p>Extensive volunteer experience through missionary service, camps, community outreach, and youth programs.</p>
+</div>
+</div>
+</section>
+
+<section id="interests">
+<h3>Interests & Involvement</h3>
+<p>
+Outside of work and academics, I enjoy dance, photography, outdoor recreation, and lifelong learning. I am an avid reader with a particular interest in history and government, and I hope to attend law school in the future. Growing up in the Pacific Northwest fostered a lasting appreciation for environmental conservation and the outdoors, and I enjoy activities ranging from hiking, mountain biking, and kayaking to recreational sports with friends. Service has been a central part of my life through organizations such as Special Olympics, Scouting, children's summer camps, and other community outreach efforts.
+</p>
+
+<div class="cards">
+<div class="card"><h4>Dance</h4><p>Cultural dance, performance, and instruction.</p></div>
+<div class="card"><h4>History</h4><p>Government, public affairs, philosophy, and lifelong learning.</p></div>
+<div class="card"><h4>Outdoors</h4><p>Backcountry hiking, extreme sports, and anything competitive.</p></div>
+<div class="card"><h4>Photography</h4><p>Capturing landscapes, people, and experiences that last a lifetime.</p></div>
+</div>
+</section>
+
+<footer id="contact">
+<h3 style="color:white">Contact Information:</h3>
+<p>Provo, Utah</p>
+<p>(425) 218-6851</p>
+<p>ogden01@byu.edu</p>
+</footer>
+
+</body>
+</html>
